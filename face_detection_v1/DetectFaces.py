@@ -88,7 +88,7 @@ def showVideo(left,top,bottom,right,name,frame,video_capture,n):
 
 def getcroppedimage(frame):
     # loading the haar case algorithm file into alg variable
-    alg = r"haarcascade_frontalface_default.xml"
+    alg = r"face_detection_v1\haarcascade_frontalface_default.xml"
     # passing the algorithm to OpenCV
     haar_cascade = cv2.CascadeClassifier(alg)
     # loading the image path into file_name variable - replace <INSERT YOUR IMAGE NAME HERE> with the path to your image
