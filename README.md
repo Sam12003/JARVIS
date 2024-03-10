@@ -9,7 +9,7 @@
 
 ## EXAMPLES OF SUCH COMMANDS:
 1. say Hello to greet the ai
-2. say "Write {the code you want it to write} in {coding language of your choice} To Ask the Ai to write a code in any language *
+2. say "Write {the code you want it to write} in {coding language of your choice} To Ask the Ai to write a code in any language {requires internet}
 3. Tell it a math problem and it will solve it  *
 4. if you say any thing else it will ask BING COPILOT for the answer and tell you what it says
 
@@ -19,7 +19,7 @@
 3. Say "Open" or "Close" along with the app name to open/close that app
 4. Say "Pause" or"Stop" to stop the music/media that is playing
 5. Say one of these ["play","continue","resume"] to Stop Music/Media that is playing
-6. if you add a music name to the above command it will open spotify and play that music in the background * {requires Spotify Desktop APP}
+6. if you add a music name to the above command it will open spotify and play that music in the background {requires Spotify Desktop APP}
 7. Say one of these ["turn up volume","volume up","increase sound","increase volume","turn up sound"] to increase volume 
 * can also tell it to increase to {the percentage of volume eg) increase volume to 50 }
 * can also tell it to increase by {the percentage of volume eg) increase volume by 10 }
@@ -38,5 +38,4 @@
 1. go to "CheckCommands.py" and there you will find a lot of list which you can change/add ways to call a specific command
 2. in "Commands.py" you will see all the commands
 
-* {requires internet}
 * it uses bing copilot AI to answer some of the questions
