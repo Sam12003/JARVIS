@@ -5,7 +5,7 @@
 1. You can change The Name Of AI: in "comman_variables.py" Change "Ai_Name" to the name of the assistant you want
 
 # Some Commands Require You To Say The AI Name before saying command
-## Once You Say The AI name it will Process everything you say and if you want it to stop listening just say one of these commands ["goodbye", "good bye", "bye" "talk to you later"]
+> Once You Say The AI name it will Process everything you say and if you want it to stop listening just say one of these commands ["goodbye", "good bye", "bye" "talk to you later"]
 
 ## EXAMPLES OF SUCH COMMANDS:
 1. say Hello to greet the ai
@@ -21,11 +21,11 @@
 5. Say one of these ["play","continue","resume"] to Stop Music/Media that is playing
 6. if you add a music name to the above command it will open spotify and play that music in the background * {requires Spotify Desktop APP}
 7. Say one of these ["turn up volume","volume up","increase sound","increase volume","turn up sound"] to increase volume 
-=> can also tell it to increase to {the percentage of volume eg) increase volume to 50 }
-=> can also tell it to increase by {the percentage of volume eg) increase volume by 10 }
+* can also tell it to increase to {the percentage of volume eg) increase volume to 50 }
+* can also tell it to increase by {the percentage of volume eg) increase volume by 10 }
 8. Say one of these ["turn down volume","volume down","lower sound","lower volume","increase sound","increase volume","turn down sound"] to decrease volume
-> can also tell it to decrease to {the percentage of volume eg) decrease volume by 50 }
-> can also tell it to decrease by {the percentage of volume eg) decrease volume by 10 }
+* can also tell it to decrease to {the percentage of volume eg) decrease volume by 50 }
+* can also tell it to decrease by {the percentage of volume eg) decrease volume by 10 }
 9. tell it to "mute" to mute/unmute volume
 10. say "next" to play next song/media
 11. say "previous" to play previous song/media
