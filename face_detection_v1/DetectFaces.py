@@ -23,8 +23,8 @@ def encode_face():
 
     global known_face_names,known_face_encodings
 
-    for image in os.listdir(r'F:\python\JARVIS\face_detection_v1\faces'):
-        face_image = face_recognition.load_image_file(fr'F:\python\JARVIS\face_detection_v1\faces\{image}')
+    for image in os.listdir(r'JARVIS\face_detection_v1\faces'):
+        face_image = face_recognition.load_image_file(fr'JARVIS\face_detection_v1\faces\{image}')
         face_encoding = face_recognition.face_encodings(face_image)[0]
 
         ImageName = image.split('.')[0]
@@ -88,7 +88,7 @@ def showVideo(left,top,bottom,right,name,frame,video_capture,n):
 
 def getcroppedimage(frame):
     # loading the haar case algorithm file into alg variable
-    alg = r"F:\python\JARVIS\face_detection_v1\haarcascade_frontalface_default.xml"
+    alg = r"JARVIS\face_detection_v1\haarcascade_frontalface_default.xml"
     # passing the algorithm to OpenCV
     haar_cascade = cv2.CascadeClassifier(alg)
     # loading the image path into file_name variable - replace <INSERT YOUR IMAGE NAME HERE> with the path to your image

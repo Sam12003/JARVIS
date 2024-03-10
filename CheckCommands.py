@@ -206,7 +206,12 @@ def CheckCommand(text):
         print(Ai_Name + ": ", end="", flush=True)
 
         if "hello" in text.lower():
-            msg = "Hello! How can I help you?"
+            
+            if(Jarvis.user_name != 'Unknown'):
+                msg = f"Hello! {Jarvis.user_name} How can I help you?"
+            else:
+                msg = "Hello! How can I help you?"
+
             print(msg)
             TextToSpeech(msg)
             print()
