@@ -1,3 +1,7 @@
+#JARVIS: AN AI ASSISTANT FOR WINDOWS
+it uses bing copiot to help you with you questions and it also works offline for task related to you pc like opening app, playing music, text to speach, voice to text,etc
+
+#SETUP
 1. in Jarvis\face_detection_v1 add a new file named "faces" this will store a database of all reconised faces for face recogition add images with the name of photo as the name of the person, The AI also does this automatically if the person is not recognised
 2. create a text file "BING_COOKIES.txt" in the Jarvis File and enter you bing cookies in it (optional)
 
