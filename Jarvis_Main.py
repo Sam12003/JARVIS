@@ -61,7 +61,7 @@ def StopAdsSpotifycall():
     import Spotify.stopSpotifyAd 
 
 # initialize stop ads spotify program
-#threading.Thread(target = StopAdsSpotifycall).start()
+threading.Thread(target = StopAdsSpotifycall).start()
 
 def DetectFace():
 
