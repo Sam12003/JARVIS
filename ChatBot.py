@@ -58,7 +58,7 @@ async def Reset():
 
 def CreateImages(prompt):
     #get cookies
-    f = open("BING COOKIES.txt", "r")
+    f = open("BING_COOKIES.txt", "r")
     data = f.read()
     f.close()
 
@@ -73,7 +73,7 @@ def CreateImages(prompt):
         print(e)
         return None
 
-def SaveImages(images, name = "image", path = "F:\python\JARVIS\Generated Images\\" ):
+def SaveImages(images, name = "image", path = "Generated Images" ):
     count = 0
     imagename = name
     for image in images:
