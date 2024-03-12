@@ -3,12 +3,22 @@ import cv2
 import time
 import mediapipe as mp
 import pyautogui
+import sys
+
+sys.path.append('F:\python\JARVIS')
+from Commands import *
 
 mp_hands = mp.solutions.hands.Hands()
 
 wCam, hCam = 640, 480
+width, height= pyautogui.size()
 
 FingerUp = [1,1,1,1,1] # Which Finger Is Up [Thumb, Index Finger, Middle Finger, Ring Finger, Pinky Finger]
+FingerStartPoint = [(0,0),(0,0),(0,0),(0,0),(0,0)] #Finger position (x,y) [Thumb, Index Finger, Middle Finger, Ring Finger, Pinky Finger]
+AllFingerWereUp = False
+ActivateMoveMouse = False
+
+msg = ""
 
 # Has Perfored a task
 HasClicked = False
@@ -21,8 +31,8 @@ Video_Capture.set(4,hCam)
 
 def DrawPoint():
 
-    text = ""
-    cv2.putText(frame, text, (100, 200), cv2.FONT_HERSHEY_DUPLEX, 0.8, (255,0,0),1)
+    global msg
+    cv2.putText(frame, msg, (100, 200), cv2.FONT_HERSHEY_DUPLEX, 0.8, (255,0,0),1)
 
     for i in range(0,20):
                 x1 = hand_landmarks.landmark[i].x * wCam
@@ -92,10 +102,10 @@ def DetectCommand():
 
     # Detect the command to be proceesed based on finger movement
 
-    global HasClicked, FingerUp, IsZooming, ZoomStartPoint
+    global HasClicked, FingerUp, IsZooming, ZoomStartPoint, msg, ActivateMoveMouse, AllFingerWereUp, FingerStartPoint
 
     # Zoom Feature
-    if FingerUp == [1,1,1,0,0] or IsZooming == True: # if the thumb, index finger and middle finger are up or zomming is in process
+    if FingerUp == [1,1,1,0,0] or IsZooming == True and FingerUp[3] != 1 and FingerUp[4] != 1: # if the thumb, index finger and middle finger are up or zomming is in process
 
         if GetDistance(8, 12) <= 45 : # Zoom IN
 
@@ -110,9 +120,7 @@ def DetectCommand():
                 print("Stop Zoom")
 
             elif GetDistance(4,12) > ZoomStartPoint and IsZooming == True: # Zooming in
-                pyautogui.keyDown('ctrl')
-                pyautogui.press('=')
-                pyautogui.keyUp('ctrl')
+                ZoomIn()
                 print("Zomming in")
 
         else: # Zoom Out
@@ -128,13 +136,36 @@ def DetectCommand():
                 print("Stop Zoom")
 
             elif GetDistance(4,12) < ZoomStartPoint and IsZooming == True: # Zooming in
-                pyautogui.keyDown('ctrl')
-                pyautogui.press('-')
-                pyautogui.keyUp('ctrl')
+                ZoomOut()
                 print("Zomming out")
     
+    # Move Mouse
+    if FingerUp == [1,1,1,1,1]:
+        # check if al finger are up
+        FingerStartPoint[0] = (reMap(hand_landmarks.landmark[0].x,.95,0.1,width,0),reMap(hand_landmarks.landmark[0].y,.95,0.1,height,0))
+        ActivateMoveMouse = False # Deactivate Mouse Moving Feature
+        AllFingerWereUp = True # Activate All Finger Are Up to let the next if statement know that all fingers were up
+
+    if FingerUp == [1,0,0,0,0] and AllFingerWereUp == True: # check if all fingers were up and then check if after that the figers were closed
+        AllFingerWereUp = False # Deactivate all fingers were up 
+        ActivateMoveMouse = True # Activate Move Mouse Feature
+
+    if ActivateMoveMouse == True:
+        msg = str((reMap(hand_landmarks.landmark[0].x,.95,0.1,width,0) - FingerStartPoint[0][0], reMap(hand_landmarks.landmark[0].y,.95,0.1,height,0) - FingerStartPoint[0][1]))
+        
+        # add movement according to software
+        # pyautogui.keyDown('shift')
+        # pyautogui.mouseDown('middle')
+        
+        try:
+            pyautogui.move(reMap(hand_landmarks.landmark[0].x,.95,0.1,width,0) - FingerStartPoint[0][0], reMap(hand_landmarks.landmark[0].y,.95,0.1,height,0) - FingerStartPoint[0][1]) # Relative to origin position
+        except Exception as e:
+            pass
+
+        FingerStartPoint[0] = (reMap(hand_landmarks.landmark[0].x,.95,0.1,width,0),reMap(hand_landmarks.landmark[0].y,.95,0.1,height,0))
+
     # Click when index and thumb touch
-    if GetDistance(4,8) <= 35 and GetDistance(8,12) >= 45:
+    if GetDistance(4,8) <= 35 and GetDistance(8,12) >= 45 and FingerUp != [0,0,0,0,0]:
         if HasClicked == False:
             # pyautogui.click()
             print("click")

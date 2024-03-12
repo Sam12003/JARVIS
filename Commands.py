@@ -267,6 +267,27 @@ def setWindowDimension(window, left = 400, top = 100, height = 1110,width = 2017
     window.left = (left)
     window.top = (top)
 
+def ZoomIn():
+    pyautogui.keyDown('ctrl')
+    pyautogui.press('=')
+    pyautogui.keyUp('ctrl')
+
+def ZoomOut():
+    pyautogui.keyDown('ctrl')
+    pyautogui.press('-')
+    pyautogui.keyUp('ctrl')
+
+def reMap(value, maxInput, minInput, maxOutput, minOutput):
+
+	value = maxInput if value > maxInput else value
+	value = minInput if value < minInput else value
+
+	inputSpan = maxInput - minInput
+	outputSpan = maxOutput - minOutput
+
+	scaledThrust = float(value - minInput) / float(inputSpan)
+
+	return minOutput + (scaledThrust * outputSpan)
 
 ''' run code of diffrent file'''
 # f = open("CheckCommands.py")
