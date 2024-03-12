@@ -96,25 +96,47 @@ def DetectCommand():
 
     # Zoom Feature
     if FingerUp == [1,1,1,0,0] or IsZooming == True: # if the thumb, index finger and middle finger are up or zomming is in process
-        if GetDistance(4,8) <= 45 and GetDistance(8,12) <= 45: # Start Of Zoom
-            
-            IsZooming = True
-            ZoomStartPoint = GetDistance(4,12) # Asign The Start Point Of Zooming
-            print("Zoom Start")
 
-        elif GetDistance(4,12) >= 150: # End Of Zoom
-            IsZooming = False
-            print("Stop Zoom")
-                
-        elif GetDistance(4,12) > ZoomStartPoint and IsZooming == True: # Zooming in
-            # pyautogui.keyDown('ctrl')
-            # pyautogui.press('=')
-            # pyautogui.keyUp('ctrl')
-            print("Zomming in")
+        if GetDistance(8, 12) <= 45 : # Zoom IN
+
+            if  GetDistance(4,12) <= 45: # Start Of Zoom
+
+                IsZooming = True
+                ZoomStartPoint = GetDistance(4,12) # Asign The Start Point Of Zooming
+                print("Zoom In Start")
+
+            if GetDistance(4,12) >= 150 and IsZooming == True: # End Of Zoom
+                IsZooming = False
+                print("Stop Zoom")
+
+            elif GetDistance(4,12) > ZoomStartPoint and IsZooming == True: # Zooming in
+                pyautogui.keyDown('ctrl')
+                pyautogui.press('=')
+                pyautogui.keyUp('ctrl')
+                print("Zomming in")
+
+        else: # Zoom Out
+            
+            if GetDistance(4,12) >= 150: # Start Of Zoom
+
+                IsZooming = True
+                ZoomStartPoint = GetDistance(4,12) # Asign The Start Point Of Zooming
+                print("Zoom Out Start")
+
+            if GetDistance(4,12) <= 45 and IsZooming == True: # End Of Zoom
+                IsZooming = False
+                print("Stop Zoom")
+
+            elif GetDistance(4,12) < ZoomStartPoint and IsZooming == True: # Zooming in
+                pyautogui.keyDown('ctrl')
+                pyautogui.press('-')
+                pyautogui.keyUp('ctrl')
+                print("Zomming out")
     
     # Click when index and thumb touch
     if GetDistance(4,8) <= 35 and GetDistance(8,12) >= 45:
         if HasClicked == False:
+            # pyautogui.click()
             print("click")
             print(FingerUp)
             HasClicked = True
