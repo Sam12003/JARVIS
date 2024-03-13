@@ -3,6 +3,7 @@ import cv2
 import time
 import mediapipe as mp
 import pyautogui
+import pydirectinput
 import sys
 
 sys.path.append('F:\python\JARVIS')
@@ -16,7 +17,11 @@ width, height= pyautogui.size()
 FingerUp = [1,1,1,1,1] # Which Finger Is Up [Thumb, Index Finger, Middle Finger, Ring Finger, Pinky Finger]
 FingerStartPoint = [(0,0),(0,0),(0,0),(0,0),(0,0)] #Finger position (x,y) [Thumb, Index Finger, Middle Finger, Ring Finger, Pinky Finger]
 AllFingerWereUp = False
+IndexAndMiddleWereUp = False
+ActivatePanMouse = False
 ActivateMoveMouse = False
+
+MouseMoveSensitivity = 0.5
 
 msg = ""
 
@@ -102,7 +107,7 @@ def DetectCommand():
 
     # Detect the command to be proceesed based on finger movement
 
-    global HasClicked, FingerUp, IsZooming, ZoomStartPoint, msg, ActivateMoveMouse, AllFingerWereUp, FingerStartPoint
+    global HasClicked, FingerUp, IsZooming, ZoomStartPoint, msg, ActivateMoveMouse, ActivatePanMouse, AllFingerWereUp, FingerStartPoint, IndexAndMiddleWereUp
 
     # Zoom Feature
     if FingerUp == [1,1,1,0,0] or IsZooming == True and FingerUp[3] != 1 and FingerUp[4] != 1: # if the thumb, index finger and middle finger are up or zomming is in process
@@ -140,28 +145,55 @@ def DetectCommand():
                 print("Zomming out")
     
     # Move Mouse
-    if FingerUp == [1,1,1,1,1]:
-        # check if al finger are up
+    if FingerUp == [0,1,1,0,0]:
         FingerStartPoint[0] = (reMap(hand_landmarks.landmark[0].x,.95,0.1,width,0),reMap(hand_landmarks.landmark[0].y,.95,0.1,height,0))
-        ActivateMoveMouse = False # Deactivate Mouse Moving Feature
-        AllFingerWereUp = True # Activate All Finger Are Up to let the next if statement know that all fingers were up
+        IndexAndMiddleWereUp = True
+        ActivateMoveMouse = False
 
-    if FingerUp == [1,0,0,0,0] and AllFingerWereUp == True: # check if all fingers were up and then check if after that the figers were closed
-        AllFingerWereUp = False # Deactivate all fingers were up 
-        ActivateMoveMouse = True # Activate Move Mouse Feature
+    if FingerUp == [0,0,0,0,0] and IndexAndMiddleWereUp == True:
+        IndexAndMiddleWereUp = False
+        ActivateMoveMouse = True
 
     if ActivateMoveMouse == True:
-        msg = str((reMap(hand_landmarks.landmark[0].x,.95,0.1,width,0) - FingerStartPoint[0][0], reMap(hand_landmarks.landmark[0].y,.95,0.1,height,0) - FingerStartPoint[0][1]))
-        
-        # add movement according to software
-        # pyautogui.keyDown('shift')
-        # pyautogui.mouseDown('middle')
-        
         try:
             pyautogui.move(reMap(hand_landmarks.landmark[0].x,.95,0.1,width,0) - FingerStartPoint[0][0], reMap(hand_landmarks.landmark[0].y,.95,0.1,height,0) - FingerStartPoint[0][1]) # Relative to origin position
         except Exception as e:
             pass
 
+    # Pan Around (Panning)
+    if FingerUp == [1,1,1,1,1]:
+        # check if al finger are up
+        FingerStartPoint[0] = (reMap(hand_landmarks.landmark[0].x,.95,0.1,width,0),reMap(hand_landmarks.landmark[0].y,.95,0.1,height,0))
+
+        # Stop Storcut of panning
+        pydirectinput.keyUp('shift') # for blender
+        pydirectinput.mouseUp(button='middle')
+
+        ActivatePanMouse = False # Deactivate Mouse Moving Feature
+        AllFingerWereUp = True # Activate All Finger Are Up to let the next if statement know that all fingers were up
+
+    if IndexAndMiddleWereUp == True:
+        AllFingerWereUp = False
+
+    if FingerUp == [1,0,0,0,0] and AllFingerWereUp == True: # check if all fingers were up and then check if after that the figers were closed
+        print("hi")
+        AllFingerWereUp = False # Deactivate all fingers were up 
+        ActivatePanMouse = True # Activate Move Mouse Feature
+
+        # add movement (panning)
+
+        if("Blender" in gw.getActiveWindow().title):
+            pydirectinput.keyDown('shift') # for blender
+
+        pydirectinput.mouseDown(button='middle')
+    
+    if ActivatePanMouse == True:
+        try:
+            # Move Mouse
+            pyautogui.move(reMap(hand_landmarks.landmark[0].x,.95,0.1,width,0) - FingerStartPoint[0][0], reMap(hand_landmarks.landmark[0].y,.95,0.1,height,0) - FingerStartPoint[0][1]) # Relative to origin position
+        except Exception as e:
+            pass
+        
         FingerStartPoint[0] = (reMap(hand_landmarks.landmark[0].x,.95,0.1,width,0),reMap(hand_landmarks.landmark[0].y,.95,0.1,height,0))
 
     # Click when index and thumb touch

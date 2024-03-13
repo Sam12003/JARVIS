@@ -1,5 +1,6 @@
 import time
 import pyautogui
+import pydirectinput
 
 time.sleep(2)
 
@@ -10,4 +11,8 @@ time.sleep(2)
 
 # pyautogui.moveTo(1,1)
 
-pyautogui.move(1,1)
+#pyautogui.keyDown('shiftleft')
+#pyautogui.keyDown('shiftright')
+pydirectinput.keyDown('shift')
+pyautogui.mouseDown(button='middle')
+print("hi")
