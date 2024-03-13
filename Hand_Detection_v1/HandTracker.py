@@ -164,6 +164,10 @@ def DetectCommand():
 
     # Pan Around (Panning)
     if FingerUp == [1,1,1,1,1]:
+
+        # Disable Mouse Movement
+        ActivateMoveMouse = False
+
         # check if al finger are up
         FingerStartPoint[0] = (reMap(hand_landmarks.landmark[0].x,.95,0.1,width,0),reMap(hand_landmarks.landmark[0].y,.95,0.1,height,0))
 
