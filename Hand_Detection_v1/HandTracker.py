@@ -160,6 +160,8 @@ def DetectCommand():
         except Exception as e:
             pass
 
+        FingerStartPoint[0] = (reMap(hand_landmarks.landmark[0].x,.95,0.1,width,0),reMap(hand_landmarks.landmark[0].y,.95,0.1,height,0))
+
     # Pan Around (Panning)
     if FingerUp == [1,1,1,1,1]:
         # check if al finger are up
