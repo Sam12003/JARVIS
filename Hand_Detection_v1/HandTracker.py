@@ -23,6 +23,8 @@ AllFingerWereUp = False
 IndexAndMiddleWereUp = False
 ActivatePanMouse = False
 ActivateMoveMouse = False
+ActivateDeleteObj = False
+ActivateAddObj = False
 
 MouseMoveSensitivity = 0.5
 
@@ -175,13 +177,13 @@ def DetectCommand():
 
     # Detect the command to be proceesed based on finger movement
 
-    global HasClicked, FingerUp, IsZooming, ZoomStartPoint, msg, ActivateMoveMouse, ActivatePanMouse, AllFingerWereUp, FingerStartPoint, IndexAndMiddleWereUp
+    global HasClicked, FingerUp, IsZooming, ZoomStartPoint, msg, ActivateMoveMouse, ActivatePanMouse, ActivateAddObj, AllFingerWereUp, FingerStartPoint, IndexAndMiddleWereUp,ActivateDeleteObj
 
     if handtype == PreferredHand: # if PreferredHand == 0 it is left hand and if PreferredHand == 1 it is right hand 
-    
         # Zoom Feature
         if FingerUp[handtype] == [1,1,1,0,0] or IsZooming == True and FingerUp[1][3] != 1 and FingerUp[1][4] != 1: # if the thumb, index finger and middle finger are up or zomming is in process
 
+            IsZooming = True
             if GetDistance(8, 12) <= 45 : # Zoom IN
             
                 if  GetDistance(4,12) <= 45: # Start Of Zoom
@@ -213,19 +215,41 @@ def DetectCommand():
                 elif GetDistance(4,12) < ZoomStartPoint and IsZooming == True: # Zooming in
                     ZoomOut()
                     print("Zomming out")
-    
-        # Move Mouse
+
+        else:
+            IsZooming = False
+            
+        # Mouse Move
+        if FingerUp[handtype] == [0,1,0,0,0]:
+            msg = str(hand_landmarks[handtype].landmark[8])
+            try:
+                pyautogui.moveTo(reMap(hand_landmarks[handtype].landmark[8].x,.95,0.1,width,0), reMap(hand_landmarks[handtype].landmark[8].y,.6,0.1,height,0))
+            except Exception as e:
+                pass
+
+        # Rotate/Orbit Function With Mouse
         if FingerUp[handtype] == [0,1,1,0,0]:
             FingerStartPoint[handtype][0] = (reMap(hand_landmarks[handtype].landmark[0].x,.95,0.1,width,0),reMap(hand_landmarks[handtype].landmark[0].y,.95,0.1,height,0))
+            
+            # Stop Storcut of Orbiting
+            if("Blender" in gw.getActiveWindow().title):
+                pydirectinput.mouseUp(button='middle') # For Blender
+
             IndexAndMiddleWereUp = True
             ActivateMoveMouse = False
 
-        if FingerUp[handtype] == [0,0,0,0,0] and IndexAndMiddleWereUp == True:
+        if FingerUp[handtype] == [0,0,0,0,0] and IndexAndMiddleWereUp == True and IsZooming == False:
             print("hi")
             IndexAndMiddleWereUp = False
             ActivateMoveMouse = True
 
-        if ActivateMoveMouse == True:
+        if ActivateMoveMouse == True: 
+            
+            # add movement (Orbit)
+
+            if("Blender" in gw.getActiveWindow().title):
+                pydirectinput.mouseDown(button='middle') # for blender
+
             try:
                 pyautogui.move(reMap(hand_landmarks[handtype].landmark[0].x,.95,0.1,width,0) - FingerStartPoint[handtype][0][0], reMap(hand_landmarks[handtype].landmark[0].y,.95,0.1,height,0) - FingerStartPoint[handtype][0][1]) # Relative to origin position
             except Exception as e:
@@ -252,7 +276,7 @@ def DetectCommand():
         if IndexAndMiddleWereUp == True:
             AllFingerWereUp = False
 
-        if FingerUp[handtype] == [1,0,0,0,0] and AllFingerWereUp == True: # check if all fingers were up and then check if after that the figers were closed
+        if FingerUp[handtype] == [1,0,0,0,0] and AllFingerWereUp == True and IsZooming == False: # check if all fingers were up and then check if after that the figers were closed
 
             AllFingerWereUp = False # Deactivate all fingers were up 
             ActivatePanMouse = True # Activate Move Mouse Feature
@@ -276,12 +300,53 @@ def DetectCommand():
         # Click when index and thumb touch
         if GetDistance(4,8) <= 35 and GetDistance(8,12) >= 45 and FingerUp != [0,0,0,0,0]:
             if HasClicked == False:
-                # pyautogui.click()
+                pyautogui.click()
                 print("click")
                 print(FingerUp)
                 HasClicked = True
         else:
             HasClicked = False
+
+    else: # Other Hand
+
+        if FingerUp[handtype] == [0,1,1,0,0]: 
+            AllFingerWereUp = False
+            if ActivateAddObj == False and ActivateDeleteObj == False:
+                print("adding")
+                AddObject()
+                ActivateAddObj = True
+        else:
+            ActivateAddObj = False
+
+        if FingerUp[handtype] == [1,1,1,1,1]:
+            print("up")
+            AllFingerWereUp = True
+            ActivateDeleteObj = False
+        
+        if FingerUp[handtype] == [0,0,0,0,0] and AllFingerWereUp:
+            print("down")
+
+            ThumbPos = (reMap(hand_landmarks[handtype].landmark[0].x,.95,0.1,width,0),reMap(hand_landmarks[handtype].landmark[0].y,.95,0.1,height,0))
+            IndexPos = (reMap(hand_landmarks[handtype].landmark[1].x,.95,0.1,width,0),reMap(hand_landmarks[handtype].landmark[1].y,.95,0.1,height,0))
+            MiddlePos = (reMap(hand_landmarks[handtype].landmark[2].x,.95,0.1,width,0),reMap(hand_landmarks[handtype].landmark[2].y,.95,0.1,height,0))
+            RingPos = (reMap(hand_landmarks[handtype].landmark[3].x,.95,0.1,width,0),reMap(hand_landmarks[handtype].landmark[3].y,.95,0.1,height,0))
+            PinkyPos = (reMap(hand_landmarks[handtype].landmark[4].x,.95,0.1,width,0),reMap(hand_landmarks[handtype].landmark[4].y,.95,0.1,height,0))
+
+            FingerStartPoint[handtype] = [ThumbPos,IndexPos,MiddlePos,RingPos,PinkyPos]
+
+            AllFingerWereUp = False
+            ActivateDeleteObj = True
+
+        if ActivateDeleteObj == True:
+            print("inside")
+
+            distanceMoved = math.dist([reMap(hand_landmarks[handtype].landmark[0].x,.95,0.1,width,0),reMap(hand_landmarks[handtype].landmark[0].x,.95,0.1,width,0)], FingerStartPoint[handtype][0])
+
+            if distanceMoved > 560:
+                print(distanceMoved)
+                Delete()
+                ActivateDeleteObj = False
+
 
 while True:
     ret, frame = Video_Capture.read()

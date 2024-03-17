@@ -4,6 +4,7 @@ from TextToSpeech import TextToSpeech
 from comman_variables import *
 from AppOpener import *
 from pynput.keyboard import Controller, Key
+import pydirectinput
 import pygetwindow as gw
 from ctypes import cast, POINTER
 from comtypes import CLSCTX_ALL
@@ -276,6 +277,23 @@ def ZoomOut():
     pyautogui.keyDown('ctrl')
     pyautogui.press('-')
     pyautogui.keyUp('ctrl')
+
+def AddObject(obj = ""):
+    if "Blender" in gw.getActiveWindow().title:
+        pydirectinput.keyDown('shift')
+        pydirectinput.press('a')
+        pydirectinput.keyUp('shift')
+
+        if obj != "":
+            pyautogui.write(obj) # search for obj
+            pyautogui.press('enter') # add the obj
+
+def Delete():
+    if "Blender" in gw.getActiveWindow().title:
+        pyautogui.press('x')
+        pyautogui.press('enter')
+    else:
+        pyautogui.press('del')
 
 def reMap(value, maxInput, minInput, maxOutput, minOutput):
 
