@@ -1,4 +1,5 @@
 import speech_recognition as sr
+import pygetwindow as gw
 from comman_variables import *
 from TextToSpeech import TextToSpeech
 from CheckCommands import *
@@ -9,6 +10,9 @@ from face_detection_v1.DetectFaces import *
 
 # Create an instance of the Recognizer class:
 recognizer = sr.Recognizer() 
+
+if 'C:\\WINDOWS\\system32\\cmd.exe' in gw.getAllTitles(): # minimize command prompt
+    gw.getWindowsWithTitle('C:\\WINDOWS\\system32\\cmd.exe')[0].minimize()
 
 # Create a function to capture voice input from the user using a microphone:
 def capture_voice_input():

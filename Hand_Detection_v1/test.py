@@ -1,8 +1,9 @@
 import time
 import pyautogui
 import pydirectinput
+import pygetwindow as gw
 
-time.sleep(2)
+#time.sleep(2)
 
 print("hi")
 
@@ -21,15 +22,6 @@ print("hi")
 # pyautogui.press('x')
 # pyautogui.press('enter')
 
-def Compute(A,B,C="*"):
-    for i in range(A,B+1):
-        if i % 2 == 0:
-            print(i,C)
-        else:
-            print(i,"@")
-    print()
-
-Compute(10,14)
-Compute(25,29,"#")
-Compute(5,10)
-        
+#cd F:\python\JARVIS 
+#python Jarvis_Main.py
+#pause
