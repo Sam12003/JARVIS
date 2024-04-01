@@ -25,7 +25,7 @@ print(Jarvis.Ai_Name)
 def CheckCommand(text):
 
     # Save Photo With Name Of New User
-    if Jarvis.CreateUser == True:
+    if Jarvis.CreateUser == True and text != "":
         print("updating")
         if 'name is' in text.lower():
             name = text.lower().split('name is')[1].capitalize()
@@ -42,7 +42,7 @@ def CheckCommand(text):
         )
         
         return
-
+    
     count = 0
     hi = False
 
@@ -52,7 +52,7 @@ def CheckCommand(text):
     if(Jarvis.StartedTyping == True):
         if any(commands in text.lower() for commands in StopTyping):
             Jarvis.StartedTyping = False
-            TextToSpeech("typing has been stoped")
+            TextTOSpeech("typing has been stoped")
             return
 
         # Get Words Without Instruction
@@ -68,13 +68,13 @@ def CheckCommand(text):
         msg = CopySelectedText()
 
         print(msg)
-        TextToSpeech(msg)
+        TextTOSpeech(msg)
 
     if "open" in text.lower():
         app_name = GetSentenceAfterWord(text, "open").split()[0]
         msg = "opening " + app_name
         print(msg)
-        TextToSpeech(msg)
+        TextTOSpeech(msg)
         Open(app_name)
         count = count + 1
         Jarvis.Images = []
@@ -83,25 +83,28 @@ def CheckCommand(text):
         if Jarvis.Image_Window_Open == True:
             msg = "closeing image"
             print(msg)
-            TextToSpeech(msg)
+            TextTOSpeech(msg)
             CloseImage()
             count = count + 1
         else:
             app_name = GetSentenceAfterWord(text, "close").split()[0]
             msg = "closeing " + app_name
             print(msg)
-            TextToSpeech(msg)
+            TextTOSpeech(msg)
             Close(app_name)
             count = count + 1
             Jarvis.Images = []
 
     if any(commands in text.lower() for commands in Pause) or "old song" == text.lower() or "top song" == text.lower():
-        msg = "Pausing"
-        print(msg)
-        TextToSpeech(msg)
-        Pause_Play()
-        count = count + 1
-        Jarvis.Images = []
+        if "song" not in text.lower() and isSpeaking == True:
+            StopSpeaking()
+        else:
+            msg = "Pausing"
+            print(msg)
+            TextTOSpeech(msg)
+            Pause_Play()
+            count = count + 1
+            Jarvis.Images = []
 
     if any(commands in text.lower() for commands in Play):
 
@@ -117,7 +120,7 @@ def CheckCommand(text):
 
         msg = "Playing"
         print(msg)
-        TextToSpeech(msg)
+        TextTOSpeech(msg)
         Pause_Play()
         count = count + 1
         Jarvis.Images = []
@@ -160,7 +163,7 @@ def CheckCommand(text):
             msg = f"Current Volume is: {GetVolume()}%"
 
         print(msg)
-        TextToSpeech(msg)     
+        TextTOSpeech(msg)     
           
     if "next" in text.lower():
         if Jarvis.Image_Window_Open == True:
@@ -178,7 +181,7 @@ def CheckCommand(text):
 
             count = count+1
             print(msg)
-            TextToSpeech(msg)
+            TextTOSpeech(msg)
             #close window by pressing any key
         
         else:
@@ -199,7 +202,7 @@ def CheckCommand(text):
             msg = "Sorry Could Not Hear Any Music"
             print(msg)
 
-        TextToSpeech(msg)
+        TextTOSpeech(msg)
 
     if(Jarvis.Ai_Name in text.lower() or Jarvis.NameCalled == True):
         
@@ -213,7 +216,7 @@ def CheckCommand(text):
                 msg = "Hello! How can I help you?"
 
             print(msg)
-            TextToSpeech(msg)
+            TextTOSpeech(msg)
             print()
             count = count + 1
             Jarvis.Images = []
@@ -234,7 +237,7 @@ def CheckCommand(text):
                 Jarvis.Images = CreateImages(text)
                 if Jarvis.Images != None:
                     print("Images Created.")
-                    TextToSpeech("Images Created")
+                    TextTOSpeech("Images Created")
                     print(Jarvis.Images)
                     for img in Jarvis.Images:
                         if not str(img).endswith(".svg"):
@@ -258,7 +261,7 @@ def CheckCommand(text):
         if any(command in text.lower() for command in Goodbye) and hi == False:
             msg = "Goodbye! Just Say " + str(Jarvis.Ai_Name) + " if you need any help!" #stop listening if you say goodbye
             print(msg)
-            TextToSpeech(msg)
+            TextTOSpeech(msg)
 
             NameCalled = False
             count = count + 1
@@ -279,21 +282,20 @@ def CheckCommand(text):
 
             if msg != None:
                 print(msg) #there was a response
-                TextToSpeech(msg) #error
+                TextTOSpeech(msg) #error
             else:
                 msg = "Sorry Something Went Wrong" #no response there was an error
                 print(msg)
-                TextToSpeech(msg)
+                TextTOSpeech(msg)
 
         if(count == 0):
             msg = asyncio.run(AiResponce(text))  #give creative answers
             Jarvis.Images = []
             if msg != None:
                 print(msg) #there was a response
-                TextToSpeech(msg) #error
+                TextTOSpeech(msg) #error
             else:
                 msg = "Sorry Something Went Wrong" #no response there was an error
                 print(msg)
-                TextToSpeech(msg)
-
+                TextTOSpeech(msg)
 

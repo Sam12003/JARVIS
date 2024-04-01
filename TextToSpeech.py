@@ -26,6 +26,7 @@ engine.setProperty('voice', voices[0].id)   #changing index, changes voices. 1 f
 #engine.runAndWait()
 
 def TextToSpeech(msg):
+    print(engine)
     engine.say(msg)
     engine.runAndWait()
     engine.stop()

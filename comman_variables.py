@@ -14,6 +14,10 @@ CreateUser = False
 FaceDetectInterval = 5   # when counter reaches this it detects face
 FaceDetectedSince = 5 # counter for when to detect face
 
+# Text To Speech
+isSpeaking = False
+speach = "" # The Threading Obj Which is responsible for starting and stoping the text to speach
+
 # Var to Check If Name Was Called
 NameCalled = False
 

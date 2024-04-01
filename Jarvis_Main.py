@@ -2,6 +2,7 @@ import speech_recognition as sr
 import pygetwindow as gw
 from comman_variables import *
 from TextToSpeech import TextToSpeech
+from Commands import *
 from CheckCommands import *
 import comman_variables as Jarvis
 import threading
@@ -107,7 +108,7 @@ def main():
             msg = "Sorry I Dont Know You! Can You Tell Me Your Name"
             
             print(msg)
-            TextToSpeech(msg)
+            TextTOSpeech(msg)
 
             Jarvis.CreateUser = True
 
@@ -117,7 +118,7 @@ def main():
                 # greet new user
                 msg = f"Hello {Jarvis.user_name}! How Can I Help You"
                 print(msg)
-                TextToSpeech(msg)
+                TextTOSpeech(msg)
 
                 # change previous user to new user
                 Jarvis.previous_user_name = Jarvis.user_name

@@ -1,6 +1,7 @@
+import multiprocessing
 import time
 import pyautogui
-from TextToSpeech import TextToSpeech
+from TextToSpeech import *
 from comman_variables import *
 from AppOpener import *
 from pynput.keyboard import Controller, Key
@@ -9,6 +10,7 @@ import pygetwindow as gw
 from ctypes import cast, POINTER
 from comtypes import CLSCTX_ALL
 from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
+import threading
 import math
 import pyperclip
 import win32gui
@@ -17,6 +19,87 @@ import cv2
 extensions = { "python": ".py", "javascript": ".js", "java": ".java", "c++": ".cpp", "c": ".c", "ruby": ".rb", "swift": ".swift", "kotlin": ".kt", "go": ".go", "rust": ".rs", "typescript": ".ts", "php": ".php", "html": ".html", "css": ".css"}
 
 MediaViewers = ["telegram", "media viewer"]
+
+"""
+class Speaking(threading.Thread):
+
+    def __init__(self, sentence, **kw):
+        super().__init__(**kw)
+        self.words = sentence
+        self.paused = False
+
+    def run(self):
+        
+        global isSpeaking
+
+        self.running = True
+        if not self.paused:
+            word = self.words
+            print(word)
+            TextToSpeech(word)
+            print("-----------",word)
+        self.running = False
+        print(self.running)
+        isSpeaking = speach.running
+
+    def stop(self):
+        global isSpeaking
+        
+        self.running = False
+        print("stopping")
+        isSpeaking = speach.running
+        self.run()
+
+    def pause(self):
+        self.paused = True
+
+    def resume(self):
+        self.paused = False
+  
+def TextTOSpeech(msg):
+
+    ''' Makes It into a thread so that you can stop it any time '''
+    global isSpeaking,speach
+
+    speach = Speaking(msg, daemon=True)
+    print(speach)
+    speach.start()  # Start speaking
+
+    isSpeaking = speach.running
+
+def StopSpeaking():
+    global isSpeaking,speach
+    try:
+        print("stop")
+        engine.stop
+        engine.endLoop
+        #speach.stop()  # Stop speaking
+        isSpeaking = speach.running
+    except:
+        pass
+"""
+
+def speak(text):
+    engine = pyttsx3.init()
+    engine.say(text)
+    engine.runAndWait()
+
+def TextTOSpeech(msg):
+    global speach
+
+    try:
+        StopSpeaking() # Stop any previous task where it was speaking
+    except:
+        pass
+
+    # Start speaking
+    speach = multiprocessing.Process(target=speak, args=(msg,))
+    speach.start() # start new text to speach task
+    
+
+def StopSpeaking():
+    global speach
+    speach.terminate()
 
 def Pause_Play():
 
@@ -210,7 +293,7 @@ def PlaySpotifyMusic(MusicName):# get only one window
     
     msg = f"Playing {MusicName} On Spotify"
     print(msg)
-    TextToSpeech(msg)
+    TextTOSpeech(msg)
 
     if Spotify == None:
         openApp("Spotify", match_closest = True)
@@ -317,4 +400,3 @@ win32clipboard.OpenClipboard()
 win32clipboard.EmptyClipboard()
 win32clipboard.CloseClipboard()
 '''
-

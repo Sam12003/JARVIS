@@ -22,6 +22,23 @@ print("hi")
 # pyautogui.press('x')
 # pyautogui.press('enter')
 
-#cd F:\python\JARVIS 
-#python Jarvis_Main.py
-#pause
+import pyttsx3
+import multiprocessing
+import time
+
+def speak(text):
+    engine = pyttsx3.init()
+    engine.say(text)
+    engine.runAndWait()
+
+if __name__ == "__main__":
+    # Start speaking
+    p = multiprocessing.Process(target=speak, args=("Hello, I am speaking this sentence.",))
+    p.start()
+
+    # Stop speaking after 2 seconds
+    time.sleep(2)
+    print("hi")
+    p.terminate()
+    p = multiprocessing.Process(target=speak, args=("Hello, I am speaking this sentence.",))
+    p.start()
